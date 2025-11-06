@@ -2,6 +2,7 @@
 using AiAssistant.Engines;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace AiAssistant.DependencyInjection
 {

@@ -1,4 +1,5 @@
 ﻿using AiAssistant.Core.Models;
+using System.Threading.Tasks;
 
 namespace AiAssistant.Core.Delegates
 {

@@ -2,7 +2,10 @@
 using AiAssistant.Core.Models;
 using AiAssistant.Engines;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace AiAssistant.Core
 {
@@ -25,7 +28,7 @@ namespace AiAssistant.Core
             var availableCommands = GetAvailableCommands();
 
             var json = await engine.ProcessQueryAsync(query, availableCommands);
-            Console.WriteLine("LLM ответ: " + json);
+            logger.LogInformation("LLM ответ: " + json);
 
             var command = JsonSerializer.Deserialize<AssistantCommand>(json);
 

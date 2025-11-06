@@ -2,9 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Shaihnurov</Authors>
+    <Company>Shaihnurov</Company>
+    <PackageId>Quantumm.AiAssistant</PackageId>
+    <Version>0.0.1</Version>
+    <Description>A library for an AI assistant that can execute commands</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/shaihnurov/AiAssistant</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/shaihnurov/AiAssistant</RepositoryUrl>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="logo.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="GroqApiLibrary" Version="1.0.9" />
@@ -18,4 +33,7 @@
     <Folder Include="Commands\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="logo.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
 </Project>

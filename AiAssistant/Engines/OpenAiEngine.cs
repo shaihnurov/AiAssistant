@@ -1,6 +1,8 @@
 ﻿using OpenAI;
 using OpenAI.Chat;
+using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace AiAssistant.Engines
 {

@@ -1,4 +1,7 @@
-﻿namespace AiAssistant.Engines
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace AiAssistant.Engines
 {
     public interface IAssistantEngine
     {
