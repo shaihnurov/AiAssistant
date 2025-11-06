@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="AiAssistant/AiAssistant.csproj" />
+  <Project Path="DemoConsole/DemoConsole.csproj" />
+</Solution>
