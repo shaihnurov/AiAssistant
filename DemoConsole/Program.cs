@@ -1,6 +1,7 @@
 ﻿using AiAssistant.Core;
 using AiAssistant.DependencyInjection;
 using AiAssistant.Engines;
+using DotNetEnv;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -12,6 +13,8 @@ namespace DemoConsole
 
         public static async Task Main(string[] args)
         {
+            Env.Load();
+
             var services = new ServiceCollection();
 
             services.AddLogging(configure => configure.AddConsole());
@@ -35,7 +38,12 @@ namespace DemoConsole
                     Environment.Exit(0);
                     return true;
                 });
-            }, sp => new GroqEngine(""));
+            }, sp =>
+            {
+                string groqApiKey = Environment.GetEnvironmentVariable("GROQ_API_KEY")
+                                    ?? throw new InvalidOperationException("GROQ_API_KEY не задан");
+                return new GroqEngine(groqApiKey);
+            });
 
             var provider = services.BuildServiceProvider();
             _assistantService = provider.GetRequiredService<IAiAssistantService>();
