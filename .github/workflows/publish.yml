@@ -6,35 +6,26 @@ on:
       - 'v*.*.*'
 
 jobs:
-  build-and-publish:
+  build:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0'
+          dotnet-version: '9.0.x'
 
-      - name: Get version from tag
-        id: get_version
-        run: |
-          echo "##[set-output name=VERSION;]${GITHUB_REF#refs/tags/v}"
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore AiAssistant/AiAssistant.csproj
 
-      - name: Build project
-        run: dotnet build --configuration Release
+      - name: Build
+        run: dotnet build AiAssistant/AiAssistant.csproj -c Release --no-restore
 
       - name: Pack NuGet package
-        run: dotnet pack ./AiAssistant/AiAssistant.csproj --configuration Release --no-build -o ./nupkg /p:PackageVersion=${{ steps.get_version.outputs.VERSION }}
+        run: dotnet pack AiAssistant/AiAssistant.csproj -c Release --no-build -o ./artifacts
 
       - name: Publish to NuGet
-        uses: NuGet/setup-nuget@v1
-        with:
-          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
-
-      - name: Push package
-        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
