@@ -100,9 +100,9 @@ dotnet add package AiAssistant --version 0.0.3
 
  AssistantCommandExtensions
    Extensions for conveniently obtaining command parameters:
-     ```csharp
-      var value = command.GetParameter<int>("count", 0);
-     ```
+```csharp
+var value = command.GetParameter<int>("count", 0);
+```
 
 ## Supported Platforms
  - .NET 9.0
