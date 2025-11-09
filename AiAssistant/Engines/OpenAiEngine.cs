@@ -6,35 +6,35 @@ using System.Threading.Tasks;
 
 namespace AiAssistant.Engines
 {
-    public class OpenAiEngine : IAssistantEngine
+    /// <summary>
+    /// Implementation of <see cref="IAssistantEngine"/> using OpenAI GPT models.
+    /// </summary>
+    public class OpenAIEngine : IAssistantEngine
     {
         private readonly ChatClient _chatClient;
 
-        public OpenAiEngine(string apiKey)
+        /// <summary>
+        /// Initializes a new instance of <see cref="OpenAIEngine"/> with the specified API key.
+        /// </summary>
+        /// <param name="apiKey">OpenAI API key.</param>
+        public OpenAIEngine(string apiKey)
         {
             var client = new OpenAIClient(apiKey);
             _chatClient = client.GetChatClient("gpt-4o-mini");
         }
 
-        public async Task<string> ProcessQueryAsync(string query, IEnumerable<string> availableCommands)
+        /// <inheritdoc/>
+        public async Task<string> ProcessQueryAsync(string query, IEnumerable<string> availableCommands, string userInstruction)
         {
-            // Сообщения для чата
             ChatMessage[] messages =
-            {
-                ChatMessage.CreateSystemMessage(
-                    "Ты — AI-ассистент для десктоп-приложений. " +
-                    "Отвечай ТОЛЬКО в формате JSON: {\"action\":\"string\", \"target\":\"string\", \"parameters\":\"string\"}. " +
-                    "Не добавляй пояснений или текста вне JSON."),
+            [
+                ChatMessage.CreateSystemMessage(userInstruction),
                 ChatMessage.CreateUserMessage(query)
-            };
+            ];
 
-            // Отправляем запрос
             var completion = await _chatClient.CompleteChatAsync(messages);
-
-            // Получаем ответ модели
             var text = completion.Value.Content[0].Text.Trim();
 
-            // Проверяем, что это JSON
             try
             {
                 JsonDocument.Parse(text);

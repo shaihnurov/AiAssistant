@@ -1,27 +1,41 @@
 ﻿using AiAssistant.Core;
-using AiAssistant.Engines;
+using AiAssistant.Core.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 
 namespace AiAssistant.DependencyInjection
 {
+    /// <summary>
+    /// Provides extension methods to register AI Assistant services into an <see cref="IServiceCollection"/>.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddAiAssistant<TEngine>(this IServiceCollection services, Action<IAiAssistantService>? configure = null,
-            Func<IServiceProvider, TEngine>? engineFactory = null) where TEngine : class, IAssistantEngine
+        /// <summary>
+        /// Registers AI Assistant services, including <see cref="IPromptBuilder"/> and <see cref="IAiAssistantService"/>.
+        /// </summary>
+        /// <param name="services">The service collection to add the services to.</param>
+        /// <param name="configure">
+        /// Optional configuration action to register commands or customize the assistant after creation.
+        /// </param>
+        /// <returns>The same <see cref="IServiceCollection"/> instance for chaining.</returns>
+        public static IServiceCollection AddAiAssistant(
+            this IServiceCollection services,
+            Action<IAiAssistantService>? configure = null)
         {
-            if (engineFactory != null)
-                services.AddSingleton<IAssistantEngine>(sp => engineFactory(sp)!);
-            else
-                services.AddSingleton<IAssistantEngine, TEngine>();
+            // Register the PromptBuilder implementation
+            services.AddSingleton<IPromptBuilder, PromptBuilder>();
 
+            // Register the AI Assistant service
             services.AddSingleton<IAiAssistantService>(sp =>
             {
-                var engine = sp.GetRequiredService<IAssistantEngine>();
                 var logger = sp.GetRequiredService<ILogger<AiAssistantService>>();
-                var assistant = new AiAssistantService(engine, logger);
+                var promptBuilder = sp.GetRequiredService<IPromptBuilder>();
+                var assistant = new AiAssistantService(logger, promptBuilder);
+
+                // Allow additional configuration (registering commands)
                 configure?.Invoke(assistant);
+
                 return assistant;
             });
 
