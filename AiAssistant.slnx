@@ -1,6 +1,0 @@
-<Solution>
-  <Folder Name="/src/">
-    <Project Path="AiAssistant/AiAssistant.csproj" />
-    <Project Path="DemoConsole/DemoConsole.csproj" />
-  </Folder>
-</Solution>
